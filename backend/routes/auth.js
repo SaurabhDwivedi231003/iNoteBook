@@ -1,49 +1,58 @@
-const express =  require('express');
+const express = require('express');
 const User = require('../models/User');
 const router = express.Router();
-const {body , validationResult } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 
+// Create a user using : POST "/api/auth/createUser"  , dosen't require
+// Auth/Login we're using Post request kuuki get me data url k sath jata h toh
+// password ko khatra ho skta h.
 
-//Create a user using : POST "/api/auth/"  , dosen't require Auth
+router.post(
+    '/createUser',
+    [
+      // Validation rules are defined in an array
+      body('name', 'Enter a valid name').isLength({ min: 3, max: 15 }), // Name should be between 3 and 15 characters
+      body('email', 'Enter a valid email').isEmail(),
+      body('password', 'Password must be at least 5 characters long').isLength({ min: 5 }),
+    ],
+    async (req, res) => {
+       //If there are error Return Bad request along with the error
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+        }           
 
-// we're using Post request kuuki get me data url k sath jata h toh password ko khatra ho skta h.
-router.post('/' ,
-[                                                       //sara validation k points array k andar h dhyaan rkhna
-    body('name' , "enter valid name").isLength({ min : 3 , max : 15}),  //mtlb naam km se km 3 words ka ho 
-    body('email', "enter valid email").isEmail(),
-    body('password' ," Password must be atleast of 5 character").isLength({min:5}), ] ,
-   (req , res)=>{
+    // ye database me save hoga seedhe
+    //Check whether user with same email exist already.
+
+    try {
+        // Check whether a user with the same email already exists
+        let user = await User.findOne({ email: req.body.email });
+        if (user) {
+          return res.status(400).json({ error: 'A user with the same email already exists' });
+        }
   
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(400).json({ errors : errors.array()});
-    }    
-     
-    // ye database me save hoga seedhe  
-    User.create({
-        name    : req.body.name ,
-        password: req.body.password , 
-        email   : req.body.email 
-        }).then(user => res.json(user)).catch(err => console.log(err), res.json({error: 'Please enter a uniqu value for email' }))
-        // jab bhi user duplicate duplicate naam ya email bgerh dalega usse ye error msg milega : Please enter a uniqu value for email
+        // Create a new user and save it to the database
+        user = await User.create({
+          name: req.body.name,
+          password: req.body.password,
+          email: req.body.email,
+        });
     
-}) 
+        res.json(user); // Return the newly created user as JSON
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).json({ error: 'some server error occured' });
+    }
+  }
+);
 
-module.exports = router 
-
-
-
+module.exports = router
 
 // ======================================NOTES=========================================================
-
-// Make sure actual MONGIDB SERVER started ho.
-// Thunder client kholo aur wha body k andr kuch JSON likh k get ya post request maro according to code.
-//  body ka example ye rha
-//  {
-//     "name" : "saurabh" , 
-//     "email" : "email@email.com",
-//     "password": "7878554"
-//   }
-
-//mongo compass me jana udhr jaake test naam k database me check krna aur jitne baar nayi GET/POST request krna utni baar reload Data krna.
-// Udhr changes milege
+// Make sure actual MONGIDB SERVER started ho. Thunder client kholo aur wha body
+// k andr kuch JSON likh k get ya post request maro according to code.  body ka
+// example ye rha  {     "name" : "saurabh" ,     "email" : "email@email.com",
+// "password": "7878554"   } mongo compass me jana udhr jaake test naam k
+// database me check krna aur jitne baar nayi GET/POST request krna utni baar
+// reload Data krna. Udhr changes milege

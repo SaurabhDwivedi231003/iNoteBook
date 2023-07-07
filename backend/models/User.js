@@ -5,7 +5,6 @@ const { Schema } = mongoose;
 // Documentation for writing schema: https://mongoosejs.com/docs/guide.html#definition    
 
 const UserSchema = new Schema({
- 
      name: {
         type : String ,
         require : true 
@@ -27,6 +26,5 @@ const UserSchema = new Schema({
   });
 
   const User = mongoose.model('User' , UserSchema) ;
-  User.createIndexes()
   module.exports = User
    // iska mtlb kahi bhi hum 'user' word ka user krege Data k liye toh ye 'UserSchema' wale ka user kr skega.
