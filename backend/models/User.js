@@ -16,7 +16,7 @@ const UserSchema = new Schema({
     },
      password : {
         type : String,
-        require : true,
+        require : true, 
         unique : true
     }, 
      date : {
@@ -26,4 +26,7 @@ const UserSchema = new Schema({
 
   });
 
-  module.exports = mongoose.model('User' , UserSchema) ; // iska mtlb kahi bhi hum 'user' word ka user krege Data k liye toh ye 'UserSchema' wale ka user kr skega.
+  const User = mongoose.model('User' , UserSchema) ;
+  User.createIndexes()
+  module.exports = User
+   // iska mtlb kahi bhi hum 'user' word ka user krege Data k liye toh ye 'UserSchema' wale ka user kr skega.
