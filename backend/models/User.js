@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-
+ 
 // Documentation for writing schema: https://mongoosejs.com/docs/guide.html#definition    
 
 const UserSchema = new Schema({

@@ -2,6 +2,11 @@ const express = require('express');
 const User = require('../models/User');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
+var bcrypt = require('bcryptjs'); 
+var jwt = require('jsonwebtoken');
+
+
+const JWT_SECRET = 'Saurabhisagood$oy';
 
 // Create a user using : POST "/api/auth/createUser"  , dosen't require
 // Auth/Login we're using Post request kuuki get me data url k sath jata h toh
@@ -32,15 +37,29 @@ router.post(
           return res.status(400).json({ error: 'A user with the same email already exists' });
         }
   
-        // Create a new user and save it to the database
+
+        //Using Salt from bcrypt.js dependency { check documentation }
+        const salt = await bcrypt.genSaltSync(10);
+        const secPass = await (req.body.password , salt );
+        
+        // Create a NEW USER and save it to the database
         user = await User.create({
           name: req.body.name,
-          password: req.body.password,
+          password: secPass,
           email: req.body.email,
         });
     
-        res.json(user); // Return the newly created user as JSON
-    } catch (error) {
+        const data = {
+          user : { id : user.id }
+        }
+
+        const authtoken = jwt.sign(data , JWT_SECRET);
+        //console.log(jwtData);
+
+       // res.json(user); // Return the newly created user as JSON
+          res.json(authtoken);
+
+      } catch (error) {
       console.error(error.message);
       res.status(500).json({ error: 'some server error occured' });
     }
@@ -56,3 +75,7 @@ module.exports = router
 // "password": "7878554"   } mongo compass me jana udhr jaake test naam k
 // database me check krna aur jitne baar nayi GET/POST request krna utni baar
 // reload Data krna. Udhr changes milege
+// Id use krne se document retrieval fast ho jata h.
+// JWS Token ki help se hum tempering hone se bachate h mtlb ek bar user apne account se login krle aur fir naam change krke wo naam daal le jo kisi existing user ka ho aur detail nikalne ki kosis kre toh hume pta chal jye
+// Two dependency added : bcryptjs { salt k liye } , jwstoken {Tempering avoid krne k liye }
+// 
