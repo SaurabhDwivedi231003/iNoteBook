@@ -6,7 +6,7 @@ connectToMongo();
 const app = express()
 const port = 5000 
  
-
+ 
 // req.body ko dekhna h toh middleware lgana hoga .
 app.use(express.json()); //middle ware
 
