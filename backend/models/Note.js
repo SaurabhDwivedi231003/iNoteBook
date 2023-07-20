@@ -19,13 +19,12 @@ const NoteSchema = new Schema({
     },
      tag : {
         type : String,
-       default : "Genral"
+       default : "General"
     },
      date : {
         type : Date ,
         default : Date.now
     }
-
   });
 
   module.exports = mongoose.model('notes' , NoteSchema) ; // iska mtlb kahi bhi hum 'note' word ka user krege Data k liye toh ye 'NoteSchema' wale ka user kr skega.

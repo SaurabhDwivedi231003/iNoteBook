@@ -52,8 +52,9 @@ router.post('/addnote', fetchuser, [
 // ROUTE 3 : UPDATE an existing note using : PUT "api/notes/updatenote/:id"  {Thunder client ki API request me ":id" ki jgh actual id daalna }
 
 router.put('/updatenote/:id', fetchuser,async (req, res) => { 
-    const { title , description , tag } = req.body;  // ye user ko body se milega like jo apn thunder client me b dalte hain.
-
+    
+    try {
+        const { title , description , tag } = req.body;  // ye user ko body se milega like jo apn thunder client me b dalte hain.
     // create a 'NewNote' object.
     const newNote = {};   // mtlb ki jo updated cheezen hain wo iss object k through hum further access krege , just we did in constructor actually they constructor.
     if(title){newNote.title = title};
@@ -66,7 +67,7 @@ router.put('/updatenote/:id', fetchuser,async (req, res) => {
 
     //Ab phle confirm krege ki jiss note ko update krne ki bat kr rhe wo , ye bnda ussi account ka user h ya fraud.
     
-    if(note.user.toString() !== req.user.id ){  // toString() uski id dega aur uske through request id se match krege aur agr match nahi hui toh status code with msg.
+    if(note.user.toString() !== req.user.id ){    // toString() uski id dega aur uske through request id se match krege aur agr match nahi hui toh status code with msg.
         return res.status(401).send("Not Allowed !");
     }
 
@@ -74,6 +75,38 @@ router.put('/updatenote/:id', fetchuser,async (req, res) => {
 
     note = await Note.findByIdAndUpdate(req.params.id , {$set : newNote} ,{ new : true}); // indByIdAndUpdate() ek function ya method h jo following parameteres leta h aur update krta h
     res.json({note});
+      }
+  catch (error) {
+    console.error(error.message);
+    res.status(500).json({error: 'some server error occured'});
+   }
 })
 
-module.exports = router
+// ROUTE 4 : DELETE an existing note using : DELETE "api/notes/deletenote/:id"  {Thunder client ki API request me ":id" ki jgh actual id daalna }
+
+router.delete('/deletenote/:id', fetchuser,async (req, res) => { 
+    
+    try {    
+    //Find the note to be deleted and then delete it.
+    let note = await Note.findById(req.params.id);  // ye wo id h jo update krna chahti h.
+    if(!note){ res.status(404).send("Not Found !")}   // Maan lo ye note exist nahi krta tha kabhi issiliye Not Of note : "!note"
+
+    //Ab phle confirm krege ki jiss note ko update krne ki bat kr rhe wo , ye bnda ussi account ka user h ya fraud.
+    
+    if(note.user.toString() !== req.user.id ){  // toString() uski id dega aur uske through request id se match krege aur agr match nahi hui toh status code with msg.
+        return res.status(401).send("Not Allowed !");
+    }
+
+    // Ab maan wo user real user h.
+
+    note = await Note.findByIdAndDelete(req.params.id); // findByIdAndDelete() ek function ya method h jo delete krta h
+    res.json({"Success : Note has been deleted !" : note });
+
+} catch (error) {
+    console.error(error.message);
+    res.status(500).json({error: 'some server error occured'});
+   
+    }
+})
+
+module.exports = router   
