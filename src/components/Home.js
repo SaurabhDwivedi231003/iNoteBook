@@ -1,9 +1,38 @@
-import React from 'react'
+import React, { useContext } from 'react';
+import noteContext from '../context/notes/noteContext';
+
 
 export const Home = () => {
+const context = useContext(noteContext);
+const { notes } = context;
+
   return (
-    <div>
-        This is home
+    <div className="homepage">
+     <div className="container my-3">
+      <h2> Add Notes</h2>
+      <form className="mainform">
+  <div className="mb-3 my-5">
+    <label htmlFor="exampleInputEmail1" className="form-label">Email address</label>
+    <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"/>
+    <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+  </div>
+  <div className="mb-3">
+    <label htmlFor="exampleInputPassword1" className="form-label">Password</label>
+    <input type="password" className="form-control" id="exampleInputPassword1"/>
+  </div>
+  <div className="mb-3 form-check">
+    <input type="checkbox" className="form-check-input" id="exampleCheck1"/>
+    <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
+  </div>
+  <button type="submit" className="btn btn-primary" id="formkibutton">Submit</button>
+</form>
+      </div> 
+      <div className="container my-3">   
+      <h3> Your Notes</h3>
+      { notes.map((notes)=> {
+        return notes.title;
+      })}
+      </div>
     </div>
   )
 }

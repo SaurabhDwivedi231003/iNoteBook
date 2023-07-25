@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #392236;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -35,4 +35,22 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* Home Page */
+.homepage{
+  /* background: #000; */
+}
+.mainform{
+  background-color: #945272f0;
+  color:#0d0b0b;
+  font-size: 22px;
+  border: 5px solid black;
+  border-radius: 15px;
+  padding:15px 10px;
+  margin:15px 10px;
+}
+#formkibutton{
+  background: #000;
+  border:3px solid #4caf90;
 }
