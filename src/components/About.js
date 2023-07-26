@@ -1,6 +1,6 @@
 //import React from 'react'
 //import {useContext} from 'react'   // OR 
-import React , {useContext, useEffect} from 'react'
+import React  from 'react'
 
 export const About = () => {
 
@@ -11,4 +11,4 @@ export const About = () => {
   )
 }
 
-export default About
+export default About 
