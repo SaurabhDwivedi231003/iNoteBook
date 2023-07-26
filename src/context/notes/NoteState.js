@@ -28,7 +28,7 @@ const NoteState = (props) => {
       "description": "SEEnU bhaiya programmer ban gye",
       "tag": "programmer",
       "date": "2023-07-25T16:13:25.418Z",
-      "__v": 0
+      "__v": 0 
     },
     {
       "_id": "64bff4a542241a0a884e74are2",
@@ -88,8 +88,39 @@ const NoteState = (props) => {
   //eslint-disable-next-line
   const [notes, setNotes] = useState(notesInitial);
 
+  // ADD a NOTE
+  
+  const addNote = ( title , description , tag) => {
+        // To do API call
+        console.log("Adding a new Note");
+        const note ={
+          "_id": "64bff58746bd849ea1800f528a",
+          "user": "64bff013d165d1f9ffa2af2e",
+          "title": title ,
+          "description": description,
+          "tag": tag,
+          "date": "2023-07-25T16:17:11.279Z",
+          "__v": 0
+        } ;
+        setNotes(notes.concat(note))
+  }
+  
+  // DELETE a NOTE
+  
+  
+  const deleteNote = () => {
+ 
+  }
+  
+  // EDIT a NOTE
+  
+  const editNote = () => {
+ 
+  }
+
+
   return (
-    <NoteContext.Provider value={{ notes , notesInitial }}>
+    <NoteContext.Provider value={{ notes , notesInitial , addNote , deleteNote , editNote}}>
       {props.children}
     </NoteContext.Provider>
   );
