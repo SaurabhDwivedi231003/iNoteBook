@@ -9,10 +9,10 @@ import Noteitem from './Noteitem'
     <div>
          <div className="row my-3">   
          <h3> Your Notes</h3>
-         { notes.map((notes)=> 
-         {
-            return <Noteitem note={notes}/>
-         })}
+         {notes.map((note) => (
+            <Noteitem key={note._id} note={note} />
+          ))}
+
     </div>
     </div>
   )

@@ -42,15 +42,19 @@
   /* background: #000; */
 }
 .mainform{
-  background-color: #945272f0;
+  background-color: #70a7c9;
   color:#0d0b0b;
-  font-size: 22px;
+  font-size: 20px;
   border: 5px solid black;
   border-radius: 15px;
-  padding:15px 10px;
-  margin:15px 10px;
+  padding:11px 7px;
+  margin:11px 7px;
 }
 #formkibutton{
   background: #000;
   border:3px solid #4caf90;
+}
+
+i{
+  cursor:pointer;
 }
