@@ -1,5 +1,3 @@
-//import React from 'react'
-//import {useContext} from 'react'   // OR 
 import React  from 'react'
 
 export const About = () => {
