@@ -1,134 +1,90 @@
-import { useState } from 'react';
-import NoteContext from './noteContext';
+import NoteContext from "./noteContext";
+import { useState } from "react";
 
 const NoteState = (props) => {
-  const notesInitial = [ 
-    {
+  const host = "http://localhost:5000"
+  const notesInitial = []
+  const [notes, setNotes] = useState(notesInitial)
+
+  // Get all Notes
+  const getNotes = async () => {
+    // API Call 
+    const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiZmYwMTNkMTY1ZDFmOWZmYTJhZjJlIn0sImlhdCI6MTY5MDMwMTQyMn0._NvHEg3VqXZkShfi8iBGNcqr3aet_knHRQewk6hB5RI" 
+      }
+    });
+    const json = await response.json()
+    console.log(json)
+    setNotes(json)
+  }
+
+  // Add a Note
+  const addNote = async (title, description, tag) => {
+    // TODO: API Call
+    // API Call 
+    const response = await fetch(`${host}/api/notes/addnote`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiZmYwMTNkMTY1ZDFmOWZmYTJhZjJlIn0sImlhdCI6MTY5MDMwMTQyMn0._NvHEg3VqXZkShfi8iBGNcqr3aet_knHRQewk6hB5RI" 
+      },
+      body: JSON.stringify({title, description, tag})
+    });
+     
+
+    console.log("Adding a new note")
+    const note = {
       "_id": "64bff4104f017abb76aa51a6",
       "user": "64bff013d165d1f9ffa2af2e",
-      "title": "My first Note ",
-      "description": "SEEnU bhaiya programmer ban gye",
-      "tag": "programmer",
+      "title": title,
+      "description": description,
+      "tag": tag,
       "date": "2023-07-25T16:10:56.895Z",
       "__v": 0
-    },
-    {
-      "_id": "64bff495422410a884ea74ane0",
-      "user": "64bff013d165d1f9ffa2af2e",
-      "title": "My first Note ",
-      "description": "SEEnU bhaiya programmer ban gye",
-      "tag": "programmer",
-      "date": "2023-07-25T16:13:09.032Z",
-      "__v": 0
-    },
-    {
-      "_id": "64bff4a542241a0a884e74arhe2",
-      "user": "64bff013d165d1f9ffa2af2e",
-      "title": "My second Note",
-      "description": "SEEnU bhaiya programmer ban gye",
-      "tag": "programmer",
-      "date": "2023-07-25T16:13:25.418Z",
-      "__v": 0 
-    },
-    {
-      "_id": "64bff4a542241a0a884e74are2",
-      "user": "64bff013d165d1f9ffa2af2e",
-      "title": "My second Note",
-      "description": "SEEnU bhaiya programmer ban gye",
-      "tag": "programmer",
-      "date": "2023-07-25T16:13:25.418Z",
-      "__v": 0
-    },
-    {
-      "_id": "64bff4a542241a0a884e74afe2",
-      "user": "64bff013d165d1f9ffa2af2e",
-      "title": "My second Note",
-      "description": "SEEnU bhaiya programmer ban gye",
-      "tag": "programmer",
-      "date": "2023-07-25T16:13:25.418Z",
-      "__v": 0
-    },
-    {
-      "_id": "64bff4a5422410a8a84e74age2",
-      "user": "64bff013d165d1f9ffa2af2e",
-      "title": "My second Note",
-      "description": "SEEnU bhaiya programmer ban gye",
-      "tag": "programmer",
-      "date": "2023-07-25T16:13:25.418Z",
-      "__v": 0
-    },
-    {
-      "_id": "64bff4a5422410a8a84e74a1e2",
-      "user": "64bff013d165d1f9ffa2af2e",
-      "title": "My second Note",
-      "description": "SEEnU bhaiya programmer ban gye",
-      "tag": "programmer",
-      "date": "2023-07-25T16:13:25.418Z",
-      "__v": 0
-    },
-    {
-      "_id": "64bff58746bd849ea800f5218a",
-      "user": "64bff013d165d1f9ffa2af2e",
-      "title": "My second Note",
-      "description": "SEEnU bhaiya programmer ban gye",
-      "tag": "programmer",
-      "date": "2023-07-25T16:17:11.279Z",
-      "__v": 0
-    },
-    {
-      "_id": "64bff58746bd849ea1800f528a",
-      "user": "64bff013d165d1f9ffa2af2e",
-      "title": "My second Note ab",
-      "description": "Saurabh the programmer ",
-      "tag": "programmer",
-      "date": "2023-07-25T16:17:11.279Z",
-      "__v": 0
-    }
-  ];
-  //eslint-disable-next-line
-  const [notes, setNotes] = useState(notesInitial);
-
-  // ADD a NOTE
-  
-  const addNote = ( title , description , tag) => {
-        // To do API call
-        console.log("Adding a new Note");
-        const note ={
-          "_id": "64bff58746bd849ea1800f528a",
-          "user": "64bff013d165d1f9ffa2af2e",
-          "title": title ,
-          "description": description,
-          "tag": tag,
-          "date": "2023-07-25T16:17:11.279Z",
-          "__v": 0
-        } ;
-        setNotes(notes.concat(note))
+    };
+    setNotes(notes.concat(note))
   }
-  
-  // DELETE a NOTE
-  
+
+  // Delete a Note
   const deleteNote = (id) => {
-            // To do API call
-
-        console.log("Deleting the note with id " + id);
-        const newNotes = notes.filter((notes)=>(notes._id!==id))
-        setNotes(newNotes);
-
+    // TODO: API Call
+    console.log("Deleting the note with id" + id);
+    const newNotes = notes.filter((note) => { return note._id !== id })
+    setNotes(newNotes)
   }
-  
-  // EDIT a NOTE
-  
-  const editNote = ( id , title , description , tag) => {
-    // API call 
+  // Edit a Note
+  const editNote = async (id, title, description, tag) => {
+    // API Call 
+    const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiZmYwMTNkMTY1ZDFmOWZmYTJhZjJlIn0sImlhdCI6MTY5MDMwMTQyMn0._NvHEg3VqXZkShfi8iBGNcqr3aet_knHRQewk6hB5RI" 
+      },
+      body: JSON.stringify({title, description, tag})
+    });
+    const json = response.json();
 
+    // Logic to edit in client
+    for (let index = 0; index < notes.length; index++) {
+      const element = notes[index];
+      if (element._id === id) {
+        element.title = title;
+        element.description = description;
+        element.tag = tag;
+      }
+
+    }
   }
-
 
   return (
-    <NoteContext.Provider value={{ notes , notesInitial , addNote , deleteNote , editNote}}>
+    <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes }}>
       {props.children}
     </NoteContext.Provider>
-  );
-};
+  )
 
+}
 export default NoteState;

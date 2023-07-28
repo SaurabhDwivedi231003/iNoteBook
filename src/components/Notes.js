@@ -1,24 +1,42 @@
-import React, { useContext } from 'react';
-import noteContext from '../context/notes/noteContext';
+import React, { useContext, useEffect, useState } from 'react';
+import noteContext from "../context/notes/noteContext";
 import Noteitem from './Noteitem';
-import { AddNote } from './AddNote';
+import AddNote from './AddNote';
 
-const Notes = () => { // Rename the component to NotesList
-    
+const Notes = () => {
   const context = useContext(noteContext);
-  const { notes, addNote } = context;
-  
+  const { notes, getNotes } = context;
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        await getNotes();
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchNotes();
+  }, []);
+
   return (
     <>
       <AddNote />
-      <div className="row my-3">   
-        <h3>Your Notes</h3>
-        {notes.map((note) => (
-          <Noteitem key={note._id} note={note} />
-        ))}
+      <div className="row my-3">
+        <h2>Your Notes</h2>
+        {loading ? (
+          <p>Loading...</p>
+        ) : notes.length === 0 ? (
+          <p>No notes found.</p>
+        ) : (
+          notes.map((note) => <Noteitem key={note._id} note={note} />)
+        )}
       </div>
     </>
   );
-}
+};
 
-export default Notes; // Export the renamed component
+export default Notes;

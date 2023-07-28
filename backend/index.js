@@ -1,12 +1,13 @@
 const connectToMongo = require('./db');
+var cors = require('cors')
 const express = require('express')
 connectToMongo();
 
+const app = express();
+const port = 5000 ;  
 
-const app = express()
-const port = 5000   
-      
 // req.body ko dekhna h toh middleware lgana hoga .
+app.use(cors());
 app.use(express.json()); //middle ware
 
 // Available routes , yha k router humne router folder k andr dal rkhe hain aur idhr sirf use kr rhe hain.
