@@ -1,26 +1,25 @@
 import NoteContext from "./noteContext";
-import { useState } from "react";
+import {useState} from "react";
 
 const NoteState = (props) => {
-  const host = "http://localhost:5000"
-  const notesInitial = []
-  const [notes, setNotes] = useState(notesInitial)
+    const host = "http://localhost:5000"
+    const notesInitial = []
+    const [notes, setNotes] = useState(notesInitial)
 
-  // Get all Notes
-  
-  const getNotes = async () => {
-    // API Call 
-      // eslint-disable-next-line 
+    // Get all Notes
 
-    const response = await fetch(`${host}/api/notes/fetchallnotes`, {
-      method: 'GET',
-      headers: {
+    const getNotes = async () => {
+        // API Call eslint-disable-next-line
+
+        const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+            method: 'GET',
+            headers: {
         'Content-Type': 'application/json',
         "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiZmYwMTNkMTY1ZDFmOWZmYTJhZjJlIn0sImlhdCI6MTY5MDMwMTQyMn0._NvHEg3VqXZkShfi8iBGNcqr3aet_knHRQewk6hB5RI" 
       }
     });
     const json = await response.json()
-    console.log(json)
+    console.log(json);
     setNotes(json)
   }
 
@@ -36,7 +35,11 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({title, description, tag})
     });
-     
+    
+    const json = await response.json();
+    console.log(json);
+    
+
 
     console.log("Adding a new note")
     const note = {
@@ -71,30 +74,39 @@ const NoteState = (props) => {
   }
 
 
-  // Edit a Note
+  // Edit a Note / UPDATE a NOTE
   const editNote = async (id, title, description, tag) => {
     // API Call 
     const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         "auth-token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRiZmYwMTNkMTY1ZDFmOWZmYTJhZjJlIn0sImlhdCI6MTY5MDMwMTQyMn0._NvHEg3VqXZkShfi8iBGNcqr3aet_knHRQewk6hB5RI" 
       },
       body: JSON.stringify({title, description, tag})
     });
-    const json = response.json();
+    const json = await response.json();
+    console.log(json);
+
+
 
     // Logic to edit in client
-    for (let index = 0; index < notes.length; index++) {
-      const element = notes[index];
-      if (element._id === id) {
-        element.title = title;
-        element.description = description;
-        element.tag = tag;
-      }
+    
+// Updated notes ko frontend end without refresh kiye nahi dikha skte kuuki
+// database me JSON format me stored hota h toh usse phle Parse krege.
+let newNotes = JSON.parse(JSON.stringify(notes));
 
+for (let index = 0; index < newNotes.length; index++) {
+    const element = newNotes[index];
+    if (element._id === id) {
+        newNotes[index].title = title;
+        newNotes[index].description = description;
+        newNotes[index].tag = tag;
     }
-  }
+    //break;
+}
+setNotes(newNotes);
+}
 
   return (
     <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes }}>
