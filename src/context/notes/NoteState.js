@@ -36,22 +36,9 @@ const NoteState = (props) => {
       body: JSON.stringify({title, description, tag})
     });
     
-    const json = await response.json();
-    console.log(json);
-    
+    const note = await response.json();
+    setNotes(notes.concat(note));
 
-
-    console.log("Adding a new note")
-    const note = {
-      "_id": "64bff4104f017abb76aa51a6",
-      "user": "64bff013d165d1f9ffa2af2e",
-      "title": title,
-      "description": description,
-      "tag": tag,
-      "date": "2023-07-25T16:10:56.895Z",
-      "__v": 0
-    };
-    setNotes(notes.concat(note))
   }
 
   // Delete a Note
@@ -65,13 +52,11 @@ const NoteState = (props) => {
       }
     });
     const json = response.json();
-    console.log(json);
     
-
-    console.log("Deleting the note with id" + id);
     const newNotes = notes.filter((note) => { return note._id !== id })
-    setNotes(newNotes)
+    setNotes(newNotes);
   }
+
 
 
   // Edit a Note / UPDATE a NOTE
@@ -85,15 +70,12 @@ const NoteState = (props) => {
       },
       body: JSON.stringify({title, description, tag})
     });
+
     const json = await response.json();
-    console.log(json);
-
-
-
-    // Logic to edit in client
+  
+// Logic to edit in client
     
-// Updated notes ko frontend end without refresh kiye nahi dikha skte kuuki
-// database me JSON format me stored hota h toh usse phle Parse krege.
+// Updated notes ko frontend end without refresh kiye nahi dikha skte kuuki database me JSON format me stored hota h toh usse phle Parse krege.
 let newNotes = JSON.parse(JSON.stringify(notes));
 
 for (let index = 0; index < newNotes.length; index++) {
@@ -103,7 +85,6 @@ for (let index = 0; index < newNotes.length; index++) {
         newNotes[index].description = description;
         newNotes[index].tag = tag;
     }
-    //break;
 }
 setNotes(newNotes);
 }
