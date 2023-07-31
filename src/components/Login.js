@@ -1,33 +1,75 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
-export const Login = () => {
+const Login = () => {
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  let history = useHistory();
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: credentials.email, password: credentials.password })
+      });
+      const json = await response.json();
+      console.log(json);
+      if(json.success){
+        //Save the auth token and redirect
+        localStorage.setItem('token' , json.authtoken);
+        history.push("/");
+      }
+      else{
+          alert("Invalid Credentials");
+      }
+    } catch (error) {
+      console.error("Error occurred:", error);
+    }
+  }
+
+  const onChange = (e) => {
+    setCredentials({ ...credentials, [e.target.name]: e.target.value });
+  }
+
   return (
     <div>
-         
-         <form>
-  <div class="form-group">
-    <label for="exampleInputEmail1">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
-    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-  </div>
-  <div class="form-group">
-    <label for="exampleInputPassword1">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" />
-  </div>
-  <div class="form-check">
-    <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-    <label class="form-check-label" for="exampleCheck1">Check me out</label>
-  </div>
-  <div class="form-group">
-    <label for="exampleFormControlFile1">Example file input</label>
-    <input type="file" class="form-control-file" id="exampleFormControlFile1" />
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">Email address</label>
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            name="email"
+            value={credentials.email}
+            onChange={onChange}
+            aria-describedby="emailHelp"
+            placeholder="Enter email"
+            required
+          />
+          <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="password" className="form-label">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            name="password"
+            value={credentials.password}
+            onChange={onChange}
+            placeholder="password"
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">Submit</button>
+      </form>
     </div>
-  )
+  );
 }
 
 export default Login;
-

@@ -57,15 +57,15 @@ router.post('/createUser', [
     }
 });
 
-// ROUTE 2 :-----------Iss end-point se User Account pe login kr
-// payega--------------------------------------------------------------------
+// ROUTE 2 :-----------Iss end-point se User Account pe login kr payega--------------------------------------------------------------------
 // Authenticate a user using : POST "api/auth/login" . No login required
 
 router.post('/login', [ // login krte wqt apn user name nahi maag rhe
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password cannot be blank').exists(), //Mtlb password empty ni hone dega , error dene lg jyega
 ], async (req, res) => {
-    const errors = validationResult(req);
+        let success = false;
+    const errors = validationResult(req);  // if there is any error resturn bad request
     if (!errors.isEmpty()) {
         return res.status(400).json({errors: errors.array()});
     }
@@ -77,6 +77,7 @@ router.post('/login', [ // login krte wqt apn user name nahi maag rhe
         let user = await User.findOne({email}); // same to fing existing user
 
         if (!user) { // Email check , agr email exist nahi krti toh ye msg dege
+            success = false;
             return res.status(400).json({error: "Please try to login with correct credentials"});
         }
 
@@ -84,7 +85,8 @@ router.post('/login', [ // login krte wqt apn user name nahi maag rhe
         const passwordCompare = await bcrypt.compare(password, user.password);
 
         if (!passwordCompare) { //if password not matched
-            return res.status(400).json({error: "Please try to login with correct credentials"});
+            success =false;
+            return res.status(400).json({success , error: "Please try to login with correct credentials"});
         }
         const data = {
             user: {
@@ -92,7 +94,8 @@ router.post('/login', [ // login krte wqt apn user name nahi maag rhe
             }
         };
         const authtoken = jwt.sign(data, JWT_SECRET); // sign kiya fir neeche token bhj diya
-        res.json({authtoken});
+        success = true;
+        res.json({success , authtoken});
 
     } catch (error) {
         console.error(error.message);
