@@ -42,6 +42,7 @@
   /* background: #000; */
 }
 .mainform{
+  margin-top:20px ;
   background-color: #70a7c9;
   color:#0d0b0b;
   font-size: 20px;
@@ -58,4 +59,10 @@
 
 i{
   cursor:pointer;
+}
+.alert-container {
+  position: absolute;
+  top: 10px;
+  right: 650px;
+  z-index: 999;
 }

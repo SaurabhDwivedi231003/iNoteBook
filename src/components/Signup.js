@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-export const Signup = () => {
+export const Signup = (props) => {
   const [credentials, setCredentials] = useState({ name: '', email: '', password: '', cpassword: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null); // New state variable to store server errors
@@ -20,15 +20,16 @@ export const Signup = () => {
       body: JSON.stringify({ name, email, password })
     });
     const json = await response.json();
-
-    if (response.status === 201) { // 201 Created - successful signup
+ 
+    if (json.success) {
       // Save the auth token and redirect
       localStorage.setItem('token', json.authtoken);
       history.push("/");
-    } else if (response.status === 409) { // 409 Conflict - email already exists
-      setError('Email already exists. Please use a different email.');
-    } else {
-      setError('An error occurred while signing up. Please try again later.');
+      props.showAlert("Account created Successfully!" , "success");
+    }
+    else{
+      props.showAlert("Email already exists. Please use a different email." , "danger")
+
     }
   }
 
