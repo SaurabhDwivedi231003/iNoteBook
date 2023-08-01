@@ -14,3 +14,18 @@ code {
 i{
   cursor: pointer;
 }
+
+/* Add this CSS to your existing styles or create a separate CSS file */
+
+/* Styling for the password toggle */
+.password-wrapper {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}

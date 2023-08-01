@@ -20,18 +20,18 @@ router.post('/createUser', [
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password must be at least 5 characters long').isLength({min: 5}) ],
    async (req, res) => {
+       let success = false;
     //If there are error Return Bad request along with the error
    const errors = validationResult(req); // The validationResult function is used to check if there are any validation errors based on the defined rules
-
     if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
+        return res.status(400).json({success , errors: errors.array()});
     }
 
     // Inside try  Check whether a user with the same email already exists if not then create a new
     try {
         let user = await User.findOne({email: req.body.email});
         if (user) {
-            return res.status(400).json({error: 'A user with the same email already exists'});
+            return res.status(400).json({success , error: 'A user with the same email already exists'});
         }
 
         //User exist nahi krta toh chalo b naya user account create krte hain
@@ -43,13 +43,13 @@ router.post('/createUser', [
         user = await User.create(
             {name: req.body.name, password: secPass, email: req.body.email}
         );
-
         // JwT auth k liye -------------
         const data = {
             user: { id: user.id }
         }
         const authtoken = jwt.sign(data, JWT_SECRET);
-        res.json(authtoken);
+        success = true;
+        res.json({ success, authtoken });
       }
        catch (error) {
         console.error(error.message);
