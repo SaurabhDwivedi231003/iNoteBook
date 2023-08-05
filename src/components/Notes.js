@@ -2,24 +2,31 @@ import React, {useContext, useEffect, useRef, useState} from 'react'
 import noteContext from "../context/notes/noteContext"
 import Noteitem from './Noteitem';
 import AddNote from './AddNote';
+import { useHistory } from 'react-router-dom';
 
 const Notes = (props) => {
     const context = useContext(noteContext);
     const {notes, getNotes, editNote} = context; // Add 'addNote' and 'updateNote'
     const [loading, setLoading] = useState(true);
+    let history = useHistory();
 
-    useEffect(() => {
-        const fetchNotes = async () => {
-            try {
-                await getNotes();
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching notes:", error);
-                setLoading(false);
-            }
-        };
-        fetchNotes();
-    }, []);
+       useEffect(() => {
+           const fetchNotes = async () => {
+               try {
+                   if (localStorage.getItem('token')) {
+                       await getNotes();
+                       setLoading(false);
+                   } else {
+                       // Redirect to login page if there's no token
+                       history.push("/login");
+                   }
+               } catch (error) {
+                   console.error("Error fetching notes:", error);
+                   setLoading(false);
+               }
+           };
+           fetchNotes();
+       }, [history, getNotes]);
 
     const ref = useRef(null);
     const refClose = useRef(null);
@@ -61,11 +68,11 @@ const Notes = (props) => {
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="description" className="form-label">Description</label>
-                                <input  type="text"  className="form-control" placeholder="Enter Title minimun of 5 character"  id="edescription"  name="edescription"  value={note.edescription}  onChange={onChange} minLength={5} required/>
+                                <input  type="text"  className="form-control" placeholder="Enter Title description of 5 character"  id="edescription"  name="edescription"  value={note.edescription}  onChange={onChange} minLength={5} required/>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="tag" className="form-label">Tag</label>
-                                <input type="text" className="form-control" placeholder="Enter Title minimun of 5 character" id="etag" name="etag" value={note.etag} onChange={onChange} minLength={5} required/>
+                                <input type="text" className="form-control" placeholder="Enter tag" id="etag" name="etag" value={note.etag} onChange={onChange} minLength={5} required/>
                             </div>
 
                         </form>

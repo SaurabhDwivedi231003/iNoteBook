@@ -29,7 +29,7 @@ const AddNote = (props) => {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="tag" className="form-label">Tag</label>
-                    <input type="text" className="form-control" id="tag" name="tag" value={note.tag} onChange={onChange} minLength={5} required placeholder="Password" />
+                    <input type="text" className="form-control" id="tag" name="tag" value={note.tag} onChange={onChange} minLength={5} required placeholder="Enter Tag" />
                 </div>
                 <button disabled={note.title.length<5 || note.description.length<5} type="submit" id="formkibutton" className="btn btn-primary" onClick={handleClick}>Add Note</button>
             </form>

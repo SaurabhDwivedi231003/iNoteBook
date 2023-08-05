@@ -7,7 +7,6 @@ const Login = (props) => {
 
   let history = useHistory();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -20,15 +19,13 @@ const Login = (props) => {
       });
       const json = await response.json();
       console.log(json);
-      if(json.success){
-        //Save the auth token and redirect
-        localStorage.setItem('token' , json.authtoken);
+      if (json.success) {
+        // Save the auth token and redirect
+        localStorage.setItem('token', json.authtoken);
         history.push("/");
-        props.showAlert(" LoggedIn Successfully!" , "success")
-
-      }
-      else{
-          props.showAlert("Invalid details" , "danger")
+        props.showAlert("LoggedIn Successfully!", "success")
+      } else {
+        props.showAlert("Invalid details", "danger")
       }
     } catch (error) {
       console.error("Error occurred:", error);
@@ -38,51 +35,48 @@ const Login = (props) => {
   const onChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   }
- // Function to toggle password visibility
- const togglePasswordVisibility = () => {
-  setShowPassword(!showPassword);
-}
+
+  // Function to toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  }
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">Email address</label>
+    <div className='container'>
+      <div className="main">
+        <p className="sign" align="center">Sign in</p>
+        <form onSubmit={handleSubmit} className="form1">
           <input
-            type="email"
-            className="form-control"
-            id="email"
+            type="text"
+            className="un"
+            align="center"
+            placeholder="Username"
             name="email"
             value={credentials.email}
             onChange={onChange}
-            aria-describedby="emailHelp"
-            placeholder="Enter email"
-            required
           />
-          <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
-        </div>
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">Password</label>
           <div className="password-wrapper">
             <input
-              type={showPassword ? 'text' : 'password'} // Toggle between 'text' and 'password' based on showPassword state
-              className="form-control"
-              id="password"
+              type={showPassword ? 'text' : 'password'}
+              className="pass"
+              align="center"
+              placeholder="Password"
               name="password"
+              value={credentials.password}
               onChange={onChange}
-              required
               minLength={5}
+              required
             />
             <span className="password-toggle" onClick={togglePasswordVisibility}>
               {showPassword ? 'Hide' : 'Show'}
             </span>
           </div>
-        </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
-      </form>
+          <button type="submit" className="submit" align="center">Sign in</button>
+          <p className="forgot" align="center"><a href="#">Forgot Password?</a></p>
+        </form>
+      </div>
     </div>
   );
 }
 
 export default Login;
- 
