@@ -1,6 +1,52 @@
-# Getting Started with Create React App
+# iNotebook - Your Notes on Cloud
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+iNotebook is a full-stack web application that allows users to create, manage, and store their notes securely on the cloud. It provides an intuitive user interface for taking and organizing notes with the convenience of being accessible from anywhere.
+
+![iNotebook Preview](link-to-screenshot.png)
+
+## Table of Contents
+
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+
+- User Authentication: Securely sign up, log in, and log out.
+- Create Notes: Add, edit, and delete notes with a rich text editor.
+- Cloud Storage: Your notes are securely stored on the cloud for easy access.
+- Categorize Notes: Organize your notes into categories or tags.
+- Responsive Design: Enjoy a seamless experience on various devices.
+
+## Technologies Used
+
+- **Frontend:**
+  - React.js
+  - Redux for state management
+  - Axios for API requests
+  - React Router for routing
+  - Material-UI for the user interface
+
+- **Backend:**
+  - Node.js
+  - Express.js
+  - MongoDB for database storage
+  - Mongoose for MongoDB object modeling
+  - JWT for user authentication
+  - Bcrypt for password hashing
+
+## Installation
+
+To run this project locally, follow these steps:
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/your-username/iNotebook.git
+   cd iNotebook
 
 ## Available Scripts
 
